@@ -1,4 +1,5 @@
 import json
+import os
 
 class Counter():
     def __init__(self):
@@ -7,12 +8,12 @@ class Counter():
         self.count_streak = 0
         self.record = []
         
-        with open('conf/config.json', 'r', encoding="utf-8") as file:
-            data = json.load(file)
-            self.set_text_template(data["text_template"], mode=0)
-            self.count_win = data["count"]["win"]
-            self.count_lose = data["count"]["lose"]
-            self.count_streak = data["count"]["streak"]
+        data = self._get_json_data()
+        
+        self.set_text_template(data["text_template"])
+        self.count_win = data["count"]["win"]
+        self.count_lose = data["count"]["lose"]
+        self.count_streak = data["count"]["streak"]
 
 
     def win(self):
@@ -64,27 +65,22 @@ class Counter():
         
         return text
     
-    def get_text_template(self):        
-        with open('conf/config.json', "r", encoding="utf-8") as file:
-            data = json.load(file)
+    def get_text_template(self):
+        data = self._get_json_data()
         
         return data["text_template"]
     
 
-    def set_text_template(self, value, mode=1):        
-        # modeが0(=初回起動時)は書き込みを行わない
-        if mode != 0:
-            with open('conf/config.json', "r", encoding="utf-8") as file:
-                data = json.load(file)
-                
-            data["text_template"] = value
-            
-            with open('conf/config.json', "w", encoding="utf-8") as file:
-                json.dump(data, file, indent=4)
+    def set_text_template(self, value):
+        data = self._get_json_data()
+                            
+        data["text_template"] = value
+        
+        with open('conf/config.json', "w", encoding="utf-8") as file:
+            json.dump(data, file, indent=4)
     
-    def update_count(self):        
-        with open('conf/config.json', "r", encoding="utf-8") as file:
-            data = json.load(file)
+    def update_count(self):
+        data = self._get_json_data()
         
         data["count"]["win"] = self.count_win
         data["count"]["lose"] = self.count_lose
@@ -95,3 +91,25 @@ class Counter():
             
         with open('count.txt', 'w', encoding='utf-8') as file:
             file.write(self.get_text())
+    
+    def _get_json_data(self):        
+        try:
+            with open('conf/config.json', "r", encoding="utf-8") as file:
+                data = json.load(file)
+        except FileNotFoundError:
+            print("filenotfounderror")
+            data = {
+                "text_template": "$w勝 $l敗\n$s連勝中",
+                "count": {
+                    "win": 0,
+                    "lose": 0,
+                    "streak": 0
+                }
+            }
+
+            os.makedirs('conf')
+            
+            with open('conf/config.json', "w", encoding="utf-8") as file:
+                json.dump(data, file, indent=4)
+        
+        return data
