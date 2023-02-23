@@ -12,7 +12,7 @@ class App(tk.Tk):
 
         self.counter = Counter()
         self.create_widgets()
-        self.update_text(mode=0)
+        self.update_text()
 
     def create_widgets(self):
         # ラベルの作成
@@ -57,7 +57,7 @@ class App(tk.Tk):
         self.counter.rollback()
         self.update_text()
 
-    def update_text(self, mode=1):
+    def update_text(self):
         self.label.config(text=f"現在:{self.counter.count_win}勝 {self.counter.count_lose}敗 {self.counter.count_streak}連勝中")
         self.counter.update_count()
     
