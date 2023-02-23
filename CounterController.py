@@ -107,8 +107,9 @@ class Counter():
                 }
             }
             
-            if not os.path.exists(dir):
-                os.makedirs('conf')
+            conf_dir = 'conf'
+            if not os.path.exists(conf_dir):
+                os.makedirs(conf_dir)
             
             with open('conf/config.json', "w", encoding="utf-8") as file:
                 json.dump(data, file, indent=4)
