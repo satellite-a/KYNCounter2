@@ -1,19 +1,22 @@
 import json
 import os
 
-class Counter():
+class Singleton(object):
+    def __new__(cls, *args, **kargs):
+        if not hasattr(cls, "_instance"):
+            cls._instance = super(Singleton, cls).__new__(cls)
+        return cls._instance
+
+class Counter(Singleton):
+    
     def __init__(self):
-        self.count_win = 0
-        self.count_lose = 0
-        self.count_streak = 0
-        self.record = []
-        
         data = self._get_json_data()
         
         self.set_text_template(data["text_template"])
         self.count_win = data["count"]["win"]
         self.count_lose = data["count"]["lose"]
         self.count_streak = data["count"]["streak"]
+        self.record = []
 
 
     def win(self):
