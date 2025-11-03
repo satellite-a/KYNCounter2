@@ -9,6 +9,7 @@ class App(tk.Tk):
         super().__init__()
         self.title("KYNCounter2")
         self.geometry("260x115")
+        self.resizable(False, False)
 
         self.counter = counter
         self.create_widgets()
