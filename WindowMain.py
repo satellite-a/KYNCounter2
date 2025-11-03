@@ -1,16 +1,16 @@
 import tkinter as tk
-import json
+import os
 
 from CounterController import Counter
 from WindowSetting import Setting
 
 class App(tk.Tk):
-    def __init__(self):
+    def __init__(self, counter):
         super().__init__()
         self.title("KYNCounter2")
         self.geometry("260x115")
 
-        self.counter = Counter()
+        self.counter = counter
         self.create_widgets()
         self.update_text()
 
@@ -60,9 +60,11 @@ class App(tk.Tk):
     def update_text(self):
         self.label.config(text=f"現在:{self.counter.count_win}勝 {self.counter.count_lose}敗 {self.counter.count_streak}連勝中")
         self.counter.update_count()
+        with open('count.txt', 'w', encoding='utf-8') as file:
+            file.write(self.counter.get_text())
     
     def setting(self):
-        setting = Setting()
+        setting = Setting(self, self.counter)
         setting.mainloop()
 
 

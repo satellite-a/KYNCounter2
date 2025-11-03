@@ -1,15 +1,16 @@
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+import os
 
 from CounterController import Counter
 
-class Setting(tk.Tk):
-    def __init__(self):
-        super().__init__()
+class Setting(tk.Toplevel):
+    def __init__(self, master, counter):
+        super().__init__(master)
         self.title("Setting")
         self.geometry("300x150")
         
-        self.counter = Counter()
+        self.counter = counter
         self.create_widgets()
 
     def create_widgets(self):
@@ -36,15 +37,11 @@ class Setting(tk.Tk):
     def apply(self):
         # テキストボックスの最初の文字から最後まで(ただし改行は除く)取得
         self.counter.set_text_template(self.textbox.get("1.0","en-1c"))
-        self.counter.get_text()
         self.counter.update_count()
+        with open('count.txt', 'w', encoding='utf-8') as file:
+            file.write(self.counter.get_text())
         self.destroy()
     
     def cancel(self):
         # 保存せず終了
         self.destroy()
-
-
-if __name__== '__main__':
-    setting = Setting()
-    setting.mainloop()
