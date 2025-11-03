@@ -1,8 +1,0 @@
-{
-    "text_template": "$w\u52dd $l\u6557\n$s\u9023\u52dd\u4e2d",
-    "count": {
-        "win": 0,
-        "lose": 0,
-        "streak": 0
-    }
-}
