@@ -1,8 +1,16 @@
 import json
 import os
+import platform
 
 class ConfigManager:
-    def __init__(self, config_path=os.path.join(os.path.expanduser("~"), ".kyncounter2", "config.json")):
+    def __init__(self, config_path=None):
+        if config_path is None:
+            if platform.system() == "Windows":
+                app_data = os.getenv('APPDATA')
+                config_path = os.path.join(app_data, 'KYNCounter2', 'config.json')
+            else:
+                xdg_config_home = os.getenv('XDG_CONFIG_HOME', os.path.join(os.path.expanduser('~'), '.config'))
+                config_path = os.path.join(xdg_config_home, 'KYNCounter2', 'config.json')
         self.config_path = config_path
         self.data = self._load_config()
 
